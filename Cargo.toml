@@ -1,0 +1,44 @@
+[package]
+name = "easy-proxy"
+version = "0.1.0"
+edition = "2024"
+build = "build.rs"
+
+[[bin]]
+name = "easy-proxy"
+path = "src/main.rs"
+
+[dependencies]
+gpui-kit = "=0.9.0"
+tokio = { version = "1", features = ["rt-multi-thread", "net", "io-util", "time", "sync", "macros"] }
+serde_json = "1"
+base64 = "0.22"
+libloading = "0.8"
+parking_lot = "0.12"
+
+[features]
+# Mock processes/proxy for README screenshots, never in release builds.
+demo = []
+
+[dev-dependencies]
+gpui-kit = { version = "=0.9.0", features = ["test-support"] }
+
+[dependencies.windows-sys]
+version = "0.61"
+features = [
+    "Win32_Foundation",
+    "Win32_Networking_WinSock",
+    "Win32_NetworkManagement_IpHelper",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_Threading",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_Security",
+]
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 16
+strip = true
+panic = "unwind"
